@@ -13,36 +13,6 @@ void main() {
     );
   }
 
-  test('should validate email', () {
-    final bloc = SessionBloc(
-      sessionService: MockSessionService(),
-      sessionTracker: SessionTracker(),
-    );
-
-    bloc.changeEmail(null);
-    expect(bloc.email, emitsError(isNotEmpty));
-    bloc.changeEmail(" ");
-    expect(bloc.email, emitsError(isNotEmpty));
-    bloc.changeEmail("email address");
-    expect(bloc.email, emitsError(isNotEmpty));
-    bloc.changeEmail("max@bluechilli.com");
-    expect(bloc.email, emits("max@bluechilli.com"));
-  });
-
-  test('should validate password', () {
-    final bloc = SessionBloc(
-      sessionService: MockSessionService(),
-      sessionTracker: SessionTracker(),
-    );
-
-    bloc.changePassword(null);
-    expect(bloc.password, emitsError(isNotEmpty));
-    bloc.changePassword(" ");
-    expect(bloc.password, emitsError(isNotEmpty));
-    bloc.changePassword("123456");
-    expect(bloc.password, emits("123456"));
-  });
-
   test('should be able to login with username and password', () {
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();

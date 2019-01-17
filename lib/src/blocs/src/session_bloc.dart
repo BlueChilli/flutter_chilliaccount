@@ -6,12 +6,9 @@ import 'package:rxdart/rxdart.dart';
 class SessionBloc {
   final SessionService sessionService;
   final SessionTracker sessionTracker;
-  AuthValidator _validator;
   RxCommand<LoginRequest, Session> _loginCommand;
   RxCommand<void, bool> _logoutCommand;
   RxCommand<void, Session> _loadSessionCommand;
-  final _emailController = BehaviorSubject<String>(seedValue: null);
-  final _passwordController = BehaviorSubject<String>(seedValue: null);
 
   SessionBloc({
     @required this.sessionTracker,
@@ -19,8 +16,6 @@ class SessionBloc {
     AuthValidator validator,
   })  : assert(sessionTracker != null),
         assert(sessionService != null) {
-    _validator = validator ?? AuthValidatorImpl();
-
     _loginCommand = RxCommand.createAsync<LoginRequest, Session>((req) async {
       var r = await sessionService.login(req);
 
@@ -66,17 +61,4 @@ class SessionBloc {
   RxCommand<void, bool> get logoutCommand => _logoutCommand;
 
   RxCommand<void, Session> get loadSessionCommand => _loadSessionCommand;
-
-  Observable<String> get email =>
-      _emailController.stream.transform(_validator.validateEmail);
-  Observable<String> get password =>
-      _passwordController.stream.transform(_validator.validatePassword);
-
-  Function(String) get changeEmail => _emailController.sink.add;
-  Function(String) get changePassword => _passwordController.sink.add;
-
-  dispose() {
-    _emailController.close();
-    _passwordController.close();
-  }
 }
