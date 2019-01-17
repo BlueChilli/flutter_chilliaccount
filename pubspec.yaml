@@ -10,12 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ">=0.1.6"
   rx_command: ">=4.1.0"
   rxdart: ">=0.20.0"
   chopper: ">=1.1.0"
   shared_preferences: ">=0.4.3"
   logging: ^0.11.3+2
+  equatable: ">=0.1.6"
 
 dev_dependencies:
   flutter_test:

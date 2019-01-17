@@ -1,5 +1,5 @@
 import 'package:chopper/chopper.dart';
-import 'package:flutter_account/models/error_info.dart';
+import 'package:flutter_account/chilli_account.dart';
 
 class ErrorConverter extends Converter {
   @override

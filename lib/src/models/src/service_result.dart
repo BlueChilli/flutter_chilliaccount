@@ -1,4 +1,4 @@
-import 'package:flutter_account/models/service_exception.dart';
+import 'package:flutter_account/chilli_account.dart';
 
 class ServiceResult<T> {
   final T result;
