@@ -14,7 +14,7 @@ abstract class SessionService {
   Future<void> removeSession();
   Future<ServiceResult<UserData>> login(LoginRequest req);
   Future<ServiceResult> logout();
-  Future<ServiceResult<UserData>> currentUser();
+  Future<ServiceResult<UserData>> currentSession();
 }
 
 class SessionServiceImpl with ServiceMixin implements SessionService {
@@ -45,9 +45,9 @@ class SessionServiceImpl with ServiceMixin implements SessionService {
   }
 
   @override
-  Future<ServiceResult<UserData>> currentUser() async {
+  Future<ServiceResult<UserData>> currentSession() async {
     try {
-      var response = await api.currentUser();
+      var response = await api.currentSession();
       return ServiceResult.success(response.body);
     } on Response catch (error) {
       return getErrorInfo<UserData>(error, logger);

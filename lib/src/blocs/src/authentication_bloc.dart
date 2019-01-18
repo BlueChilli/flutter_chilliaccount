@@ -3,17 +3,16 @@ import 'package:meta/meta.dart';
 import 'package:rx_command/rx_command.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SessionBloc {
+class AuthenticationBloc {
   final SessionService sessionService;
   final SessionTracker sessionTracker;
   RxCommand<LoginRequest, Session> _loginCommand;
   RxCommand<void, bool> _logoutCommand;
   RxCommand<void, Session> _loadSessionCommand;
 
-  SessionBloc({
+  AuthenticationBloc({
     @required this.sessionTracker,
     @required this.sessionService,
-    AuthValidator validator,
   })  : assert(sessionTracker != null),
         assert(sessionService != null) {
     _loginCommand = RxCommand.createAsync<LoginRequest, Session>((req) async {
@@ -41,7 +40,7 @@ class SessionBloc {
 
       if (r.isSuccessful) {
         var session = r.result;
-        var r1 = await sessionService.currentUser();
+        var r1 = await sessionService.currentSession();
 
         if (r1.isSuccessful) {
           session = session.copyWith(r1.result);

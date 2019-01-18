@@ -62,7 +62,7 @@ class UserData {
     this.anonymous = false,
   });
 
-  final String userKey;
+  String userKey;
   final String firstName;
   final String lastName;
   final String fullName;
@@ -76,6 +76,23 @@ class UserData {
 
   static const fromJson = _$UserDataFromJson;
 
+  factory UserData.copyWith({
+    String userKey,
+    @required UserData userData,
+  }) {
+    return UserData(
+      userKey: userData.userKey ?? userKey,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      fullName: userData.fullName,
+      email: userData.email,
+      statusRaw: userData.statusRaw,
+      roles: userData.roles,
+      profilePhoto: userData.profilePhoto,
+      anonymous: userData.anonymous,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$UserDataToJson(this);
 
   UserStatus get status {
@@ -86,4 +103,84 @@ class UserData {
   }
 
   bool isAnonymous() => status == UserStatus.Anonymous;
+}
+
+@JsonSerializable()
+class UserInfoUpdateRequest {
+  UserInfoUpdateRequest({
+    this.currentPassword,
+    this.email,
+    this.emailSpecified = false,
+    this.password,
+    this.passwordSpecified = false,
+    this.firstname,
+    this.lastname,
+    this.status,
+    this.nameSpecified = false,
+  });
+
+  final String currentPassword;
+  final String email;
+  final bool emailSpecified;
+  final String password;
+  final bool passwordSpecified;
+  final String status;
+  final String firstname;
+  final String lastname;
+  final bool nameSpecified;
+
+  static const fromJson = _$UserInfoUpdateRequestFromJson;
+
+  Map<String, dynamic> toJson() => _$UserInfoUpdateRequestToJson(this);
+}
+
+@JsonSerializable()
+class PushTokenInfo {
+  PushTokenInfo({
+    this.deviceId,
+    this.token,
+  });
+
+  final String deviceId;
+  final String token;
+
+  static const fromJson = _$PushTokenInfoFromJson;
+
+  Map<String, dynamic> toJson() => _$PushTokenInfoToJson(this);
+}
+
+@JsonSerializable()
+class ResetPasswordTokenRequest {
+  ResetPasswordTokenRequest({
+    this.email,
+    this.type = "Password",
+  });
+
+  final String email;
+  final String type;
+
+  static const fromJson = _$ResetPasswordTokenRequestFromJson;
+
+  Map<String, dynamic> toJson() => _$ResetPasswordTokenRequestToJson(this);
+}
+
+@JsonSerializable()
+class ResetPasswordRequest {
+  ResetPasswordRequest({
+    this.email,
+    this.firstname,
+    this.lastname,
+    this.password,
+    this.token,
+  });
+
+  final String firstname;
+  final String lastname;
+  final String password;
+  final String email;
+  final String token;
+
+  static const fromJson = _$ResetPasswordRequestFromJson;
+
+  Map<String, dynamic> toJson() => _$ResetPasswordRequestToJson(this);
 }

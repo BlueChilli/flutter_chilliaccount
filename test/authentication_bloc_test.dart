@@ -22,7 +22,7 @@ void main() {
 
     when(sessionService.saveSession(any)).thenAnswer((_) => Future.value());
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );
@@ -47,7 +47,7 @@ void main() {
 
     when(sessionService.removeSession()).thenAnswer((_) => Future.value());
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );
@@ -67,7 +67,7 @@ void main() {
     when(sessionService.login(any)).thenAnswer(
         (_) => Future.value(ServiceResult.success(createFakeUserData())));
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );
@@ -92,7 +92,7 @@ void main() {
 
     when(sessionService.saveSession(any)).thenAnswer((_) => Future.value());
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );
@@ -112,7 +112,7 @@ void main() {
     when(sessionService.login(any))
         .thenAnswer((_) => Future.value(ServiceResult.failure()));
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );
@@ -140,7 +140,7 @@ void main() {
 
     when(sessionService.removeSession()).thenAnswer((_) => Future.value());
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );
@@ -163,10 +163,10 @@ void main() {
     when(sessionService.loadSession()).thenAnswer((_) => Future.value(
         ServiceResult.success(Session.fromUserData(createFakeUserData()))));
 
-    when(sessionService.currentUser())
+    when(sessionService.currentSession())
         .thenAnswer((_) => Future.value(ServiceResult.failure()));
 
-    final bloc = SessionBloc(
+    final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
     );

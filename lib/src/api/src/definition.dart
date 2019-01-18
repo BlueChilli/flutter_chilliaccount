@@ -32,8 +32,8 @@ abstract class UsersApi extends ChopperService {
   @Delete(url: "/usersessions/current")
   Future<Response> logout();
 
-  @Get(url: "/users/current")
-  Future<Response<UserData>> currentUser();
+  @Get(url: "/usersessions/current")
+  Future<Response<UserData>> currentSession();
 
   @Patch(url: "/users/current")
   Future<Response<UserData>> updateUserInfo(
@@ -44,6 +44,10 @@ abstract class UsersApi extends ChopperService {
       @Body() Map<String, dynamic> userInfo);
 
   @Post(url: "/users/tokens")
-  Future<Response<UserData>> requestResetPasswordToken(
-      @Body() Map<String, dynamic> userInfo);
+  Future<Response> requestResetPasswordToken(
+      @Body() Map<String, dynamic> tokenInfo);
+
+  @Patch(url: "/users/bytoken/{tokenId}")
+  Future<Response> resetPassword(
+      @Path("tokenId") String tokenId, @Body() Map<String, dynamic> tokenInfo);
 }

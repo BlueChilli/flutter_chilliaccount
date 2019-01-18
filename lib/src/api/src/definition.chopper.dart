@@ -64,8 +64,8 @@ class _$UsersApi extends UsersApi with ChopperServiceMixin {
     return client.send(request);
   }
 
-  Future<Response<UserData>> currentUser() {
-    final url = '/api/v1/users/current';
+  Future<Response<UserData>> currentSession() {
+    final url = '/api/v1/usersessions/current';
     final request = new Request('GET', url);
     return client.send<UserData>(request);
   }
@@ -84,11 +84,18 @@ class _$UsersApi extends UsersApi with ChopperServiceMixin {
     return client.send<UserData>(request);
   }
 
-  Future<Response<UserData>> requestResetPasswordToken(
-      Map<String, dynamic> userInfo) {
+  Future<Response> requestResetPasswordToken(Map<String, dynamic> tokenInfo) {
     final url = '/api/v1/users/tokens';
-    final body = userInfo;
+    final body = tokenInfo;
     final request = new Request('POST', url, body: body);
-    return client.send<UserData>(request);
+    return client.send(request);
+  }
+
+  Future<Response> resetPassword(
+      String tokenId, Map<String, dynamic> tokenInfo) {
+    final url = '/api/v1/users/bytoken/$tokenId';
+    final body = tokenInfo;
+    final request = new Request('PATCH', url, body: body);
+    return client.send(request);
   }
 }

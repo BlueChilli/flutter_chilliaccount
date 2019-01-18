@@ -68,3 +68,68 @@ Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
       'profilePhotoPath': instance.profilePhoto,
       'anonymous': instance.anonymous
     };
+
+UserInfoUpdateRequest _$UserInfoUpdateRequestFromJson(
+    Map<String, dynamic> json) {
+  return UserInfoUpdateRequest(
+      currentPassword: json['currentPassword'] as String,
+      email: json['email'] as String,
+      emailSpecified: json['emailSpecified'] as bool,
+      password: json['password'] as String,
+      passwordSpecified: json['passwordSpecified'] as bool,
+      firstname: json['firstname'] as String,
+      lastname: json['lastname'] as String,
+      status: json['status'] as String,
+      nameSpecified: json['nameSpecified'] as bool);
+}
+
+Map<String, dynamic> _$UserInfoUpdateRequestToJson(
+        UserInfoUpdateRequest instance) =>
+    <String, dynamic>{
+      'currentPassword': instance.currentPassword,
+      'email': instance.email,
+      'emailSpecified': instance.emailSpecified,
+      'password': instance.password,
+      'passwordSpecified': instance.passwordSpecified,
+      'status': instance.status,
+      'firstname': instance.firstname,
+      'lastname': instance.lastname,
+      'nameSpecified': instance.nameSpecified
+    };
+
+PushTokenInfo _$PushTokenInfoFromJson(Map<String, dynamic> json) {
+  return PushTokenInfo(
+      deviceId: json['deviceId'] as String, token: json['token'] as String);
+}
+
+Map<String, dynamic> _$PushTokenInfoToJson(PushTokenInfo instance) =>
+    <String, dynamic>{'deviceId': instance.deviceId, 'token': instance.token};
+
+ResetPasswordTokenRequest _$ResetPasswordTokenRequestFromJson(
+    Map<String, dynamic> json) {
+  return ResetPasswordTokenRequest(
+      email: json['email'] as String, type: json['type'] as String);
+}
+
+Map<String, dynamic> _$ResetPasswordTokenRequestToJson(
+        ResetPasswordTokenRequest instance) =>
+    <String, dynamic>{'email': instance.email, 'type': instance.type};
+
+ResetPasswordRequest _$ResetPasswordRequestFromJson(Map<String, dynamic> json) {
+  return ResetPasswordRequest(
+      email: json['email'] as String,
+      firstname: json['firstname'] as String,
+      lastname: json['lastname'] as String,
+      password: json['password'] as String,
+      token: json['token'] as String);
+}
+
+Map<String, dynamic> _$ResetPasswordRequestToJson(
+        ResetPasswordRequest instance) =>
+    <String, dynamic>{
+      'firstname': instance.firstname,
+      'lastname': instance.lastname,
+      'password': instance.password,
+      'email': instance.email,
+      'token': instance.token
+    };
