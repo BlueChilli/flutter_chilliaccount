@@ -10,7 +10,7 @@ class UserBloc {
   RxCommand<PushTokenInfo, void> _registerPushTokenCommand;
   RxCommand<UserInfoUpdateRequest, Session> _updateUserCommand;
   RxCommand<ResetPasswordTokenRequest, void> _requestPasswordResetCommand;
-  RxCommand<ResetPasswordRequest, Session> _resetPasswordCommand;
+  RxCommand<ResetPasswordRequest, bool> _resetPasswordCommand;
 
   UserBloc({
     @required this.userService,
@@ -45,17 +45,25 @@ class UserBloc {
         RxCommand.createAsync<UserInfoUpdateRequest, Session>((info) async {
       ServiceResult<UserData> r;
 
-      if (info.passwordSpecified) {
+      assert(
+          info.emailSpecified || info.passwordSpecified || info.nameSpecified,
+          "must set at least one of emailSpecified or passwordSpecified or nameSpecified flag");
+
+      var shouldUpdateUserInfo = true;
+      if (info.passwordSpecified || info.emailSpecified) {
         r = await userService.patchUserInfo(info);
+        shouldUpdateUserInfo = r.isSuccessful;
       }
 
-      if (info.nameSpecified) {
+      shouldUpdateUserInfo = shouldUpdateUserInfo && info.nameSpecified;
+
+      if (shouldUpdateUserInfo) {
         r = await userService.updateUserInfo(info);
       }
 
       if (r.isSuccessful) {
         var userData = UserData.copyWith(
-          userKey: sessionTracker.session?.value?.userKey,
+          userKey: sessionTracker.session?.value?.userKey ?? r.result.userKey,
           userData: r.result,
         );
         var session = Session.fromUserData(userData);
@@ -77,18 +85,11 @@ class UserBloc {
     });
 
     _resetPasswordCommand =
-        RxCommand.createAsync<ResetPasswordRequest, Session>((info) async {
+        RxCommand.createAsync<ResetPasswordRequest, bool>((info) async {
       var r = await userService.resetPassword(info);
 
       if (r.isSuccessful) {
-        var userData = UserData.copyWith(
-          userKey: sessionTracker.session?.value?.userKey,
-          userData: r.result,
-        );
-        var session = Session.fromUserData(userData);
-        await sessionService.saveSession(session);
-        sessionTracker.sessionLoaded(session);
-        return session;
+        return r.isSuccessful;
       }
 
       throw r.getException();
@@ -102,6 +103,6 @@ class UserBloc {
       _updateUserCommand;
   RxCommand<ResetPasswordTokenRequest, void> get requestPasswordResetCommand =>
       _requestPasswordResetCommand;
-  RxCommand<ResetPasswordRequest, Session> get resetPasswordCommand =>
+  RxCommand<ResetPasswordRequest, bool> get resetPasswordCommand =>
       _resetPasswordCommand;
 }
