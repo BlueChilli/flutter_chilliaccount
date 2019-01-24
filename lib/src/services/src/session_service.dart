@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_account/chilli_account.dart';
+import 'package:chilli_account/chilli_account.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';

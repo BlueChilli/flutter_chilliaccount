@@ -1,4 +1,4 @@
-import 'package:flutter_account/chilli_account.dart';
+import 'package:chilli_account/chilli_account.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SessionTracker {

@@ -1,6 +1,6 @@
 import "dart:async";
 import "package:chopper/chopper.dart";
-import 'package:flutter_account/chilli_account.dart';
+import 'package:chilli_account/chilli_account.dart';
 
 part "definition.chopper.dart";
 

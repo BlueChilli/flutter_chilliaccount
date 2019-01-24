@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_account/chilli_account.dart';
+import 'package:chilli_account/chilli_account.dart';
 import 'package:meta/meta.dart';
 import 'package:logging/logging.dart';
 import 'package:chopper/chopper.dart';

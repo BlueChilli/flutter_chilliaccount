@@ -1,4 +1,4 @@
-import 'package:flutter_account/chilli_account.dart';
+import 'package:chilli_account/chilli_account.dart';
 import 'package:meta/meta.dart';
 import 'package:rx_command/rx_command.dart';
 

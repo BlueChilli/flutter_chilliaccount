@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_account/chilli_account.dart';
+import 'package:chilli_account/chilli_account.dart';
 
 abstract class AuthValidator {
   StreamTransformer<String, String> get validateEmail;
