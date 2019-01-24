@@ -13,6 +13,8 @@ abstract class UserService {
   Future<ServiceResult> requestResetPasswordToken(
       ResetPasswordTokenRequest req);
   Future<ServiceResult<UserData>> resetPassword(ResetPasswordRequest req);
+  Future<ServiceResult<UserData>> login(LoginRequest req);
+  Future<ServiceResult> logout();
 }
 
 class UserServiceImpl with ServiceMixin implements UserService {
@@ -23,6 +25,32 @@ class UserServiceImpl with ServiceMixin implements UserService {
     @required this.api,
     this.logger,
   });
+
+  @override
+  Future<ServiceResult<UserData>> login(LoginRequest req) async {
+    try {
+      var response = await api.login(req.toJson());
+      return ServiceResult.success(response.body);
+    } on Response catch (error) {
+      return getErrorInfo<UserData>(error, logger);
+    } on Exception catch (error, stacktrace) {
+      return logErrorInfo<UserData>(
+          this.runtimeType.toString(), error, stacktrace, logger);
+    }
+  }
+
+  @override
+  Future<ServiceResult> logout() async {
+    try {
+      await api.logout();
+      return ServiceResult.successWithNoData();
+    } on Response catch (error) {
+      return getErrorInfo(error, logger);
+    } on Exception catch (error, stacktrace) {
+      return logErrorInfo(
+          this.runtimeType.toString(), error, stacktrace, logger);
+    }
+  }
 
   @override
   Future<ServiceResult<UserData>> register(RegistrationInfo info) async {

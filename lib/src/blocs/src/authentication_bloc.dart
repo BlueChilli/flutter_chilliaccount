@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 class AuthenticationBloc {
   final SessionService sessionService;
   final SessionTracker sessionTracker;
+  final UserService userService;
   RxCommand<LoginRequest, Session> _loginCommand;
   RxCommand<void, bool> _logoutCommand;
   RxCommand<void, Session> _loadSessionCommand;
@@ -13,10 +14,11 @@ class AuthenticationBloc {
   AuthenticationBloc({
     @required this.sessionTracker,
     @required this.sessionService,
+    @required this.userService,
   })  : assert(sessionTracker != null),
         assert(sessionService != null) {
     _loginCommand = RxCommand.createAsync<LoginRequest, Session>((req) async {
-      var r = await sessionService.login(req);
+      var r = await userService.login(req);
 
       if (r.isSuccessful) {
         var session = Session.fromUserData(r.result);
@@ -29,7 +31,7 @@ class AuthenticationBloc {
     });
 
     _logoutCommand = RxCommand.createAsyncNoParam<bool>(() async {
-      await sessionService.logout();
+      await userService.logout();
       await sessionService.removeSession();
       sessionTracker.sessionEnded();
       return true;

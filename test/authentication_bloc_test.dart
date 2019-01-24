@@ -2,6 +2,8 @@ import 'package:chilli_account/chilli_account.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+class MockUserService extends Mock implements UserService {}
+
 class MockSessionService extends Mock implements SessionService {}
 
 void main() {
@@ -14,18 +16,19 @@ void main() {
   }
 
   test('should be able to login with username and password', () {
+    final userService = MockUserService();
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();
 
-    when(sessionService.login(any)).thenAnswer(
+    when(userService.login(any)).thenAnswer(
         (_) => Future.value(ServiceResult.success(createFakeUserData())));
 
     when(sessionService.saveSession(any)).thenAnswer((_) => Future.value());
 
     final bloc = AuthenticationBloc(
-      sessionService: sessionService,
-      sessionTracker: sessionTracker,
-    );
+        sessionService: sessionService,
+        sessionTracker: sessionTracker,
+        userService: userService);
 
     bloc.loginCommand.execute(LoginRequest(
       email: "max@bluechilli.com",
@@ -40,9 +43,10 @@ void main() {
 
   test('should be able to logout', () {
     final sessionService = MockSessionService();
+    final userService = MockUserService();
     final sessionTracker = SessionTracker();
 
-    when(sessionService.logout()).thenAnswer(
+    when(userService.logout()).thenAnswer(
         (_) async => await Future.value(ServiceResult.successWithNoData()));
 
     when(sessionService.removeSession()).thenAnswer((_) => Future.value());
@@ -50,6 +54,7 @@ void main() {
     final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
+      userService: userService,
     );
 
     bloc.logoutCommand.execute();
@@ -63,13 +68,15 @@ void main() {
   test('session is available when login successfully', () {
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();
+    final userService = MockUserService();
 
-    when(sessionService.login(any)).thenAnswer(
+    when(userService.login(any)).thenAnswer(
         (_) => Future.value(ServiceResult.success(createFakeUserData())));
 
     final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
+      userService: userService,
     );
 
     bloc.loginCommand.execute(LoginRequest(
@@ -86,8 +93,9 @@ void main() {
   test('session gets clear when logout successfully', () {
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();
+    final userService = MockUserService();
 
-    when(sessionService.logout()).thenAnswer(
+    when(userService.logout()).thenAnswer(
         (_) async => await Future.value(ServiceResult.successWithNoData()));
 
     when(sessionService.saveSession(any)).thenAnswer((_) => Future.value());
@@ -95,6 +103,7 @@ void main() {
     final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
+      userService: userService,
     );
 
     bloc.logoutCommand.execute();
@@ -108,13 +117,15 @@ void main() {
   test('failed login should throw exception', () {
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();
+    final userService = MockUserService();
 
-    when(sessionService.login(any))
+    when(userService.login(any))
         .thenAnswer((_) => Future.value(ServiceResult.failure()));
 
     final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
+      userService: userService,
     );
 
     bloc.loginCommand.execute(LoginRequest(
@@ -131,11 +142,12 @@ void main() {
   test('failed logout should still expire the session', () {
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();
+    final userService = MockUserService();
 
-    when(sessionService.login(any)).thenAnswer((_) async =>
+    when(userService.login(any)).thenAnswer((_) async =>
         await Future.value(ServiceResult.success(createFakeUserData())));
 
-    when(sessionService.logout())
+    when(userService.logout())
         .thenAnswer((_) => Future.value(ServiceResult.failure()));
 
     when(sessionService.removeSession()).thenAnswer((_) => Future.value());
@@ -143,6 +155,7 @@ void main() {
     final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
+      userService: userService,
     );
 
     bloc.logoutCommand.execute();
@@ -153,11 +166,12 @@ void main() {
   test('can load session if available', () {
     final sessionService = MockSessionService();
     final sessionTracker = SessionTracker();
+    final userService = MockUserService();
 
-    when(sessionService.login(any)).thenAnswer((_) async =>
+    when(userService.login(any)).thenAnswer((_) async =>
         await Future.value(ServiceResult.success(createFakeUserData())));
 
-    when(sessionService.logout())
+    when(userService.logout())
         .thenAnswer((_) => Future.value(ServiceResult.failure()));
 
     when(sessionService.loadSession()).thenAnswer((_) => Future.value(
@@ -169,6 +183,7 @@ void main() {
     final bloc = AuthenticationBloc(
       sessionService: sessionService,
       sessionTracker: sessionTracker,
+      userService: userService,
     );
 
     bloc.loadSessionCommand.execute();
