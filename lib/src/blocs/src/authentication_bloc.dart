@@ -42,7 +42,7 @@ class AuthenticationBloc {
 
       if (r.isSuccessful) {
         var session = r.result;
-        var r1 = await sessionService.currentSession();
+        var r1 = await userService.refreshUserSession();
 
         if (r1.isSuccessful) {
           session = session.copyWith(r1.result);
