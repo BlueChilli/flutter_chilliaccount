@@ -15,6 +15,7 @@ abstract class UserService {
   Future<ServiceResult<UserData>> resetPassword(ResetPasswordRequest req);
   Future<ServiceResult<UserData>> login(LoginRequest req);
   Future<ServiceResult> logout();
+  Future<ServiceResult<UserData>> refreshUserSession();
 }
 
 class UserServiceImpl with ServiceMixin implements UserService {
@@ -125,6 +126,19 @@ class UserServiceImpl with ServiceMixin implements UserService {
       UserInfoUpdateRequest req) async {
     try {
       var response = await api.updateUserInfo(req.toJson());
+      return ServiceResult.success(response.body);
+    } on Response catch (error) {
+      return getErrorInfo<UserData>(error, logger);
+    } on Exception catch (error, stacktrace) {
+      return logErrorInfo<UserData>(
+          this.runtimeType.toString(), error, stacktrace, logger);
+    }
+  }
+
+  @override
+  Future<ServiceResult<UserData>> refreshUserSession() async {
+    try {
+      var response = await api.currentSession();
       return ServiceResult.success(response.body);
     } on Response catch (error) {
       return getErrorInfo<UserData>(error, logger);

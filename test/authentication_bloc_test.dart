@@ -177,7 +177,7 @@ void main() {
     when(sessionService.loadSession()).thenAnswer((_) => Future.value(
         ServiceResult.success(Session.fromUserData(createFakeUserData()))));
 
-    when(sessionService.currentSession())
+    when(userService.refreshUserSession())
         .thenAnswer((_) => Future.value(ServiceResult.failure()));
 
     final bloc = AuthenticationBloc(

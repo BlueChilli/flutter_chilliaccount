@@ -12,17 +12,14 @@ abstract class SessionService {
   Future<ServiceResult<Session>> loadSession();
   Future<void> saveSession(Session session);
   Future<void> removeSession();
-  Future<ServiceResult<UserData>> currentSession();
 }
 
 class SessionServiceImpl with ServiceMixin implements SessionService {
   final Future<SharedPreferences> preference;
-  final UsersApi api;
   final Logger logger;
 
   SessionServiceImpl({
     @required this.preference,
-    @required this.api,
     this.logger,
   });
 
@@ -42,20 +39,6 @@ class SessionServiceImpl with ServiceMixin implements SessionService {
     }
   }
 
-  @override
-  Future<ServiceResult<UserData>> currentSession() async {
-    try {
-      var response = await api.currentSession();
-      return ServiceResult.success(response.body);
-    } on Response catch (error) {
-      return getErrorInfo<UserData>(error, logger);
-    } on Exception catch (error, stacktrace) {
-      return logErrorInfo<UserData>(
-          this.runtimeType.toString(), error, stacktrace, logger);
-    }
-  }
-
-  
   @override
   Future<void> removeSession() async {
     var prefs = await preference;
